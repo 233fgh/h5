@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>填写页面</title>
+		<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+		<style type="text/css">
+			.cards{
+				width:25rem;
+				margin: 0 auto;
+				padding: 1.5625rem;
+				border: 0.0625rem solid rgba(225,225,225,0.5) ; 
+				border-radius: 0.5625rem;
+			}
+			.item{
+				display: flex;
+				align-items: center;
+				margin-bottom: 1.25rem;
+			}
+			.item .el-input{
+				width: 15.625rem;
+			}
+			.item .itemTitle{
+				width:6.25rem;
+			}
+			.heads{
+				margin-bottom: 0.9375rem;
+				display: flex;
+				justify-content: space-around;
+			}
+			.heads .el-tag{
+				cursor: pointer;
+			}
+			.isAction{
+				color: #ff6700;
+			}
+			.foot{
+				text-align: center;
+			}
+			.codeItem .el-input{
+				width: 5rem;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<div class="cards">
+				<div class="heads"><el-tag @click="logins(true)" :class="isLogin?'isAction':''" >登录</el-tag><el-tag  @click="logins(false)" :class="isLogin?'':'isAction'">注册</el-tag></div>
+				<div class="item" v-if="!isLogin"><span class="itemTitle">姓名</span><el-input v-model="name" placeholder="请输入您的姓名"></el-input></div>
+				<div class="item" ><span class="itemTitle">手机号码</span><el-input v-model="iphoneNum" placeholder="请输入您的手机号码"></el-input></div>
+				<div class="item"><span class="itemTitle">密码</span><el-input  v-model="password" type="password" placeholder="请输入您的登录密码"></el-input></div>
+				<div class="item codeItem"><span class="itemTitle">验证码</span>
+				<el-input placeholder="验证码" v-model="code"></el-input>
+				<canvas id="mycanvas" width="140px" height="38px" style="border:1px solid #DCDFE6;backgroundColor:white;borderRadius:4px;" @click="getCode" ></canvas>
+				</div>
+				<div class="foot"><el-button @click="login" type="primary" v-if="isLogin">登录</el-button><el-button v-if="!isLogin" @click="register">注册</el-button></div>
+			</div>
+		</div>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+		<script type="text/javascript">
+			var app = new Vue({
+			  el: '#app',
+			  data(){
+				  return {
+					isLogin:true,
+					name:'',
+					iphoneNum:'',
+					password:'',
+					codetext:'',
+					code:'',
+				  }
+			  },
+			  mounted() {
+			   this.randoms();
+			   
+			  },
+			  methods:{
+				getCode:function(){
+				  this.randoms();
+				},
+				logins:function(is){//页面类型
+					this.isLogin = is;
+				},
+				login:function(){//登录
+					axios.get('/user?ID=12345').then(function (response) {
+						console.log(response);
+					  })
+					  .catch(function (error) {
+						console.log(error);
+					  });
+					window.location = "data.html"
+				},
+				register:function(){//注册
+					window.location = "data.html"
+				},
+				myCanva:function(codes){
+				  var canvas = document.getElementById('mycanvas');
+				  var canvas_width= '140';
+				  var canvas_height= '38';
+				  var context = canvas.getContext("2d");
+				  canvas.width = canvas_width;
+				  canvas.height = canvas_height;
+				  var aCode = codes.split("");
+				  var aLength = aCode.length;//获取到数组的长度
+				   //得到随机的颜色值
+				    function randomColor() {
+				        var r = Math.floor(Math.random() * 256);
+				        var g = Math.floor(Math.random() * 256);
+				        var b = Math.floor(Math.random() * 256);
+				        return "rgb(" + r + "," + g + "," + b + ")";
+				    }
+				   for (var i = 0; i < 4; i++) {  //这里的for循环可以控制验证码位数（如果想显示6位数，4改成6即可）
+				      var deg = Math.random() * 30 * Math.PI / 180;//产生0~30之间的随机弧度
+				      // var deg = Math.random() - 0.5; //产生一个随机弧度
+				      var txt = aCode[i];
+				      var x = 10 + i * 30;//文字在canvas上的x坐标
+				      var y = 20 + Math.random() * 8;//文字在canvas上的y坐标
+				      context.font = "bold 23px 微软雅黑";
+				
+				      context.translate(x, y);
+				      context.rotate(deg);
+				      context.fillStyle = randomColor();
+				      context.fillText(txt, 0, 0);
+				
+				      context.rotate(-deg);
+				      context.translate(-x, -y);
+				  }
+				  for (var i = 0; i <= 5; i++) { //验证码上显示线条
+				      context.strokeStyle = randomColor();
+				      context.beginPath();
+				      context.moveTo(Math.random() * canvas_width, Math.random() * canvas_height);
+				      context.lineTo(Math.random() * canvas_width, Math.random() * canvas_height);
+				      context.stroke();
+				  }
+				  for (var i = 0; i <= 30; i++) { //验证码上显示小点
+				      context.strokeStyle = randomColor();
+				      context.beginPath();
+				      var x = Math.random() * canvas_width;
+				      var y = Math.random() * canvas_height;
+				      context.moveTo(x, y);
+				      context.lineTo(x + 1, y + 1);
+				      context.stroke();
+				  }
+				},
+				randoms:function(){//产生随机验证码
+				  this.codetext = Math.floor(Math.random()*9000+999.1).toString();
+				  this.code = this.codetext
+				  this.myCanva(this.codetext);
+				},
+			  }
+			})
+		</script>
+	</body>
+</html>

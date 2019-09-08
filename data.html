@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+		<style type="text/css">
+			.dataCard{
+				width: 18.75rem;
+				height: 100vh;
+				padding: 1.5625rem;
+				margin: 0 auto;
+				border: 0.0625rem solid rgba(225,225,225,0.5);
+			}
+			.dataCardItem{
+				margin-bottom: 0.9375rem;
+				color: #FF6700;
+			}
+			.dataCardItem span{
+				margin-right: 0.9375rem;
+				color: black;
+			}
+			.images{
+				text-align: center;
+			}
+			.images img{
+				width: 6.25rem;
+				height: 6.25rem;
+			}
+			.texts{
+				font-size: 0.75rem;
+				margin-bottom: 0.9375rem;
+			}
+			.red{
+				color: red;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app1">
+			<div class="dataCard">
+				<div class="dataCardItem"><span>姓名</span>{{name}}</div>
+				<div class="dataCardItem"><span>电话</span>{{iphones}}</div>
+				<div class="dataCardItem"><span>已邀请数</span>{{num}}人</div>
+				<div class="dataCardItem"><span>方式</span><el-button type="primary">联系客服</el-button></div>
+				<div class="images">
+					<el-card :body-style="{ padding: '0px' }">
+					  <img  src="img/88888.jpg" class="image">
+					  <div style="padding: 14px;">
+						<span class="texts">点击生成专用邀请码，发送给邀请人</span><br><span class="red">此邀请码注册的用户归您名下</span>
+						<div class="bottom clearfix">
+						  <time class="time">{{ currentDate }}</time>
+						  <el-button type="text" class="button">生成邀请码</el-button>
+						</div>
+					  </div>
+					</el-card>
+				</div>
+			</div>
+		</div>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+		<script type="text/javascript">
+			var app = new Vue({
+			  el: '#app1',
+			  data(){
+				  return {
+					name:'冯国慧',
+					iphones:'13104801049',
+					num:0,
+					password:'123',
+				  }
+			  },
+			  methods:{
+				newcode:function(){
+					  
+				},
+				register:function(){
+					
+				}
+			  }
+			})
+		</script>
+	</body>
+</html>
